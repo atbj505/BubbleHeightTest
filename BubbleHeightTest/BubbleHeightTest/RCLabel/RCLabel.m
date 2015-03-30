@@ -36,7 +36,6 @@
  */
 
 #import "RCLabel.h"
-#import "RegexKitLite.h"
 #define LINK_PADDING 2
 #define IMAGE_PADDING 2
 #define IMAGE_USER_WIDTH 180.0

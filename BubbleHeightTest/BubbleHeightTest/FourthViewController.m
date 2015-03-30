@@ -1,48 +1,60 @@
 //
-//  ThirdViewController.m
+//  FourthViewController.m
 //  BubbleHeightTest
 //
-//  Created by Robert on 15/3/29.
+//  Created by Robert on 15/3/30.
 //  Copyright (c) 2015年 NationSky. All rights reserved.
 //
 
-#import "ThirdViewController.h"
-#import "RCLabel.h"
 #import "FourthViewController.h"
+#import "MLEmojiLabel.h"
 
-@interface ThirdViewController ()
+@interface FourthViewController ()
 
 @property (nonatomic, strong) NSString *content;
-@property (nonatomic, strong) RCLabel *richTextView;
+@property (nonatomic, strong) MLEmojiLabel *richTextView;
 @property (nonatomic, strong) UIView *bubbleView;
 
 @end
 
-@implementation ThirdViewController
+@implementation FourthViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.content = CHINESE;
-    [self addLabel:@"RCLabel"];
+    self.content = @"[微笑][微笑][白眼][白眼][白眼][白眼]微笑[愉快][冷汗][投降][微笑][微笑][白眼][白眼][白眼][白眼]微笑[愉快][冷汗][投降][微笑][微笑][白眼][白眼][白眼][白眼]微笑[愉快][冷汗][投降][微笑][微笑][白眼][白眼][白眼][白眼]微笑[愉快][冷汗][投降][微笑][微笑][白眼][白眼][白眼][白眼]微笑[愉快][冷汗][投降][微笑][微笑][白眼][白眼][白眼][白眼]微笑[愉快][冷汗][投降][微笑][微笑][白眼][白眼][白眼][白眼]微笑[愉快][冷汗][投降][微笑][微笑][白眼][白眼][白眼][白眼]微笑[愉快][冷汗][投降][微笑][微笑][白眼][白眼][白眼][白眼]微笑[愉快][冷汗][投降][微笑][微笑][白眼][白眼][白眼][白眼]微笑[愉快][冷汗][投降][微笑][微笑][白眼][白眼][白眼][白眼]微笑[愉快][冷汗][投降][微笑][微笑][白眼][白眼][白眼][白眼]微笑[愉快][冷汗][投降][微笑][微笑][白眼][白眼][白眼][白眼]微笑[愉快][冷汗][投降][微笑][微笑][白眼][白眼][白眼][白眼]微笑[愉快][冷汗][投降][微笑][微笑][白眼][白眼][白眼][白眼]微笑[愉快][冷汗][投降][微笑][微笑][白眼][白眼][白眼][白眼]微笑[愉快][冷汗][投降]";
+    [self addLabel:@"MLEmoji"];
     [self addRichTextView:self.content];
     [self addBubbleView];
     [self pushAndPop];
 }
 
 - (void)addRichTextView:(NSString*)content {
-    self.richTextView = [[RCLabel alloc] initWithFrame:CGRectMake(0,50,232,100)];
+    self.richTextView = [[MLEmojiLabel alloc] initWithFrame:CGRectMake(0,50,232,100)];
     self.richTextView.font = [UIFont systemFontOfSize:10];
     self.richTextView.backgroundColor = [UIColor redColor];
-    RTLabelComponentsStructure *componentsDS = [RCLabel extractTextStyle:CHINESE];
-    self.richTextView.componentsAndPlainText = componentsDS;
-    //获取文字高度
-    CGSize optimalSize = [self.richTextView optimumSize];
-    //改变RCLabel高度
+    self.richTextView.lineSpacing = 1.0f;
+    self.richTextView.customEmojiRegex = @"\\[[a-zA-Z0-9\\u4e00-\\u9fa5]+\\]";
+    self.richTextView.customEmojiPlistName = @"expressionImage_custom";
+    self.richTextView.text = self.content;
+    
+    CGSize textSize = [self.richTextView preferredSizeWithMaxWidth:232];
     CGRect frame = self.richTextView.frame;
-    frame.size.height = optimalSize.height;
+    frame.size.height = textSize.height;
     self.richTextView.frame = frame;
     self.richTextView.center = self.view.center;
     [self.view addSubview:self.richTextView];
+}
+
+static NSUInteger count;
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    count ++;
+    self.content = (count % 2)? CHINESE:ENGLISH;
+    self.richTextView.text = self.content;
+    CGSize textSize = [self.richTextView preferredSizeWithMaxWidth:232];
+    CGRect frame = self.richTextView.frame;
+    frame.size.height = textSize.height;
+    self.richTextView.frame = frame;
+    self.richTextView.center = self.view.center;
 }
 
 - (CGSize)richTextViewSize:(NSString*)content {
@@ -70,20 +82,7 @@
     label.textColor = [UIColor blackColor];
     label.text = string;
 }
-static NSUInteger count;
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    count ++;
-    self.content = (count % 2)? CHINESE:ENGLISH;
-    RTLabelComponentsStructure *componentsDS = [RCLabel extractTextStyle:self.content];
-    self.richTextView.componentsAndPlainText = componentsDS;
-    //获取文字高度
-    CGSize optimalSize = [self.richTextView optimumSize];
-    //改变RCLabel高度
-    CGRect frame = self.richTextView.frame;
-    frame.size.height = optimalSize.height;
-    self.richTextView.frame = frame;
-    self.richTextView.center = self.view.center;
-}
+
 - (void)addBubbleView {
     self.bubbleView = [UIView new];
     self.bubbleView.backgroundColor = [UIColor blueColor];
@@ -126,4 +125,5 @@ static NSUInteger count;
     FourthViewController *fourthVC = [FourthViewController new];
     [self.navigationController pushViewController:fourthVC animated:YES];
 }
+
 @end
